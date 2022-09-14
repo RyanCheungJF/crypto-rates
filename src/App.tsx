@@ -1,4 +1,8 @@
+import { useEffect } from 'react'
 import './App.css'
+import { getCryptoData } from './data/dataPull'
+
+const arr = await getCryptoData('hi')
 
 const App = () => {
   return (
@@ -14,31 +18,34 @@ const App = () => {
             <th className="table-header">Currency</th>
           </thead>
           <tbody className="">
-            <tr>
-              <td className="table-record">
-                <p>Ryan</p>
-              </td>
-              <td className="table-record">
-                <p>Cheung</p>
-              </td>
-              <td className="table-record">
-                <p>17</p>
-              </td>
-            </tr>
-            <tr>
-              <td className="table-record">
-                <p>Noir</p>
-              </td>
-              <td className="table-record">
-                <p>Blanc</p>
-              </td>
-              <td className="table-record">
-                <p>14</p>
-              </td>
-            </tr>
+            {arr.map((currency) => (
+              <tr>
+                <td className="table-record">
+                  <div className="flex">
+                    <img
+                      className="rounded-full w-10 h-10"
+                      src={currency.image}
+                    />
+                    <div>
+                      <p className="pl-3 text-base font-semibold">
+                        {currency.name}
+                      </p>
+                      <p className="uppercase pl-3">{currency.symbol}</p>
+                    </div>
+                  </div>
+                </td>
+                <td className="table-record">
+                  <p>{currency.current_price}</p>
+                </td>
+                <td className="table-record">
+                  <p>17</p>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
+      <button onClick={() => getCryptoData('hi')}>button test!</button>
     </div>
   )
 }
