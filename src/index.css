@@ -3,10 +3,28 @@
 @tailwind utilities;
 
 @layer components {
+  .table-image {
+    @apply rounded-full w-10 h-10;
+  }
   .table-header {
     @apply pl-4 pt-3 pb-1;
   }
   .table-record {
-    @apply pl-4 pt-3 pb-1 text-sm text-gray-900;
+    @apply table-header text-sm text-gray-900 border-b border-gray-200;
+  }
+  .currency-title {
+    @apply pl-3 text-base font-semibold;
+  }
+  .currency-symbol {
+    @apply uppercase pl-3;
+  }
+  .currency-price {
+    @apply text-base;
+  }
+  .currency-gain {
+    @apply currency-price border rounded-full px-2 bg-green-50 text-green-600;
+  }
+  .currency-loss {
+    @apply currency-price border rounded-full px-2 bg-rose-50 text-rose-600;
   }
 }

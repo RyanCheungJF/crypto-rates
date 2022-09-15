@@ -1,5 +1,3 @@
-import { JSXElementConstructor, ReactElement, ReactFragment, ReactPortal } from "react"
-
 export type Crypto = {
   id: string
   symbol: string
