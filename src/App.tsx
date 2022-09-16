@@ -1,26 +1,77 @@
+import { useEffect, useState } from 'react'
 import './App.css'
 import { getCryptoData } from './data/dataPull'
 
 const arr = await getCryptoData('hi')
 
 const App = () => {
+  const [filteredArray, setFilteredArray] = useState(arr)
+
+  useEffect(() => {}, [filteredArray])
+
+  const changeSelectOption = (value: string) => {
+    if (value == 'default') {
+      const sortedArr = [...arr]
+      setFilteredArray(sortedArr)
+    } else if (value == 'price') {
+      const sortedArr = [...arr].sort(
+        (x: { current_price: number }, y: { current_price: number }) =>
+          y.current_price - x.current_price
+      )
+      setFilteredArray(sortedArr)
+    } else if (value == 'name') {
+      const sortedArr = [...arr].sort((x, y) => x.name.localeCompare(y.name))
+      setFilteredArray(sortedArr)
+    } else if (value == 'gain') {
+      const sortedArr = [...arr].sort(
+        (
+          x: { price_change_percentage_24h: number },
+          y: { price_change_percentage_24h: number }
+        ) => y.price_change_percentage_24h - x.price_change_percentage_24h
+      )
+      setFilteredArray(sortedArr)
+    } else if (value == 'loss') {
+      const sortedArr = [...arr].sort(
+        (
+          x: { price_change_percentage_24h: number },
+          y: { price_change_percentage_24h: number }
+        ) => x.price_change_percentage_24h - y.price_change_percentage_24h
+      )
+      setFilteredArray(sortedArr)
+    } else {
+      throw Error('unsorted')
+    }
+  }
+
   return (
     <div className="container mx-auto px-8">
       <div>
         <h2 className="text-3xl py-8 font-semibold">Crypto Rates</h2>
       </div>
+      <div className="flex">
+        <h2 className="text-xl font-semibold">Sort By:</h2>
+        <select onChange={(e) => changeSelectOption(e.target.value)}>
+          <option value="default">Default</option>
+          <option value="price">Price</option>
+          <option value="name">Name</option>
+          <option value="gain">Top Gainers</option>
+          <option value="loss">Top Losers</option>
+        </select>
+      </div>
       <div>
         <table className="shadow-md rounded-md min-w-full">
           <thead className="text-left uppercase border-b-2 border-gray-200 bg-gray-100 text-gray-800">
-            <th className="table-header">Currency</th>
-            <th className="table-header">Price (USD)</th>
-            <th className="table-header">24h High</th>
-            <th className="table-header">24h Low</th>
-            <th className="table-header">Gain/Loss</th>
+            <tr>
+              <th className="table-header">Currency</th>
+              <th className="table-header">Price (USD)</th>
+              <th className="table-header">24h High</th>
+              <th className="table-header">24h Low</th>
+              <th className="table-header">Gain/Loss</th>
+            </tr>
           </thead>
           <tbody className="">
-            {arr.map((currency) => (
-              <tr>
+            {filteredArray.map((currency) => (
+              <tr key={currency.id}>
                 <td className="table-record">
                   <div className="flex">
                     <img className="table-image" src={currency.image} />
@@ -42,7 +93,7 @@ const App = () => {
                 <td className="table-record">
                   <div className="flex">
                     <p className="currency-price basis-1/2">
-                      {currency.price_change_percentage_24h}
+                      {currency.price_change_percentage_24h + '%'}
                     </p>
                     <p
                       className={
@@ -62,7 +113,6 @@ const App = () => {
           </tbody>
         </table>
       </div>
-      <button onClick={() => getCryptoData('hi')}>button test!</button>
     </div>
   )
 }
