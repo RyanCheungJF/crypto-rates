@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import { getCryptoData } from './data/dataPull'
 
-const arr = await getCryptoData('hi')
+const API = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd'
+const arr = await getCryptoData(API)
 
 const App = () => {
   const [filteredArray, setFilteredArray] = useState(arr)
@@ -44,13 +45,16 @@ const App = () => {
   }
 
   return (
-    <div className="container mx-auto px-8">
+    <div className="page-container">
       <div>
-        <h2 className="text-3xl py-8 font-semibold">Crypto Rates</h2>
+        <h2 className="page-title">Crypto Rates</h2>
       </div>
-      <div className="flex">
-        <h2 className="text-xl font-semibold">Sort By:</h2>
-        <select onChange={(e) => changeSelectOption(e.target.value)}>
+      <div className="select-container">
+        <h2 className="select-title">Sort By:</h2>
+        <select
+          className="select-component"
+          onChange={(e) => changeSelectOption(e.target.value)}
+        >
           <option value="default">Default</option>
           <option value="price">Price</option>
           <option value="name">Name</option>
@@ -59,8 +63,8 @@ const App = () => {
         </select>
       </div>
       <div>
-        <table className="shadow-md rounded-md min-w-full">
-          <thead className="text-left uppercase border-b-2 border-gray-200 bg-gray-100 text-gray-800">
+        <table className="table-container">
+          <thead className="table-header-container">
             <tr>
               <th className="table-header">Currency</th>
               <th className="table-header">Price (USD)</th>

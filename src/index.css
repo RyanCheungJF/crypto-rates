@@ -3,6 +3,18 @@
 @tailwind utilities;
 
 @layer components {
+  .page-container {
+    @apply container mx-auto px-8 pb-8;
+  }
+  .page-title {
+    @apply text-3xl py-8 font-semibold;
+  }
+  .table-container {
+    @apply shadow-md rounded-md min-w-full;
+  }
+  .table-header-container {
+    @apply text-left uppercase border-b-2 border-gray-200 bg-gray-100 text-gray-800;
+  }
   .table-image {
     @apply rounded-full w-10 h-10;
   }
@@ -11,6 +23,15 @@
   }
   .table-record {
     @apply table-header text-sm text-gray-900 border-b border-gray-200;
+  }
+  .select-container {
+    @apply flex pb-5;
+  }
+  .select-title {
+    @apply text-xl font-semibold pl-2 pr-4;
+  }
+  .select-component {
+    @apply rounded-md;
   }
   .currency-title {
     @apply pl-3 text-base font-semibold;
