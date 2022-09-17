@@ -1,47 +1,30 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { getCryptoData } from './data/dataPull'
+import axios from 'axios'
+import { Crypto } from './types/crypto'
 
-const API = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd'
-const arr = await getCryptoData(API)
+const CLOUD_FUNCTION =
+  'https://us-central1-data-cycle-361207.cloudfunctions.net/dataPull'
+
+const getCryptoData = async () => {
+  const res = await axios.get(CLOUD_FUNCTION)
+  if (res.status != 200) {
+    console.log('Could not fetch data!')
+    return
+  }
+  const data = res.data
+  return data
+}
+
+const arr = await getCryptoData()
 
 const App = () => {
-  const [filteredArray, setFilteredArray] = useState(arr)
+  const [filteredArray, setFilteredArray] = useState(arr['default'])
 
   useEffect(() => {}, [filteredArray])
 
   const changeSelectOption = (value: string) => {
-    if (value == 'default') {
-      const sortedArr = [...arr]
-      setFilteredArray(sortedArr)
-    } else if (value == 'price') {
-      const sortedArr = [...arr].sort(
-        (x: { current_price: number }, y: { current_price: number }) =>
-          y.current_price - x.current_price
-      )
-      setFilteredArray(sortedArr)
-    } else if (value == 'name') {
-      const sortedArr = [...arr].sort((x, y) => x.name.localeCompare(y.name))
-      setFilteredArray(sortedArr)
-    } else if (value == 'gain') {
-      const sortedArr = [...arr].sort(
-        (
-          x: { price_change_percentage_24h: number },
-          y: { price_change_percentage_24h: number }
-        ) => y.price_change_percentage_24h - x.price_change_percentage_24h
-      )
-      setFilteredArray(sortedArr)
-    } else if (value == 'loss') {
-      const sortedArr = [...arr].sort(
-        (
-          x: { price_change_percentage_24h: number },
-          y: { price_change_percentage_24h: number }
-        ) => x.price_change_percentage_24h - y.price_change_percentage_24h
-      )
-      setFilteredArray(sortedArr)
-    } else {
-      throw Error('unsorted')
-    }
+    setFilteredArray(arr[value])
   }
 
   return (
@@ -74,7 +57,7 @@ const App = () => {
             </tr>
           </thead>
           <tbody className="">
-            {filteredArray.map((currency) => (
+            {filteredArray.map((currency: Crypto) => (
               <tr key={currency.id}>
                 <td className="table-record">
                   <div className="flex">
